@@ -18,6 +18,9 @@ cp "$1" "$ancestor_temp"
 cp "$2" "$current_temp"
 cp "$3" "$other_temp"
 
+# Surpress Qt log messages to avoid adding noise in users workflow
+export QT_LOGGING_RULES="*=false"
+
 fmeworkbench -TITLE-OVERRIDE "[$4] Merge" \
    -COMPARE-BASE "$ancestor_temp" -COMPARE-BASE-TITLE "Base" \
    -COMPARE-TITLE1 "Ours" -COMPARE-TITLE2 "Theirs" \

@@ -12,7 +12,6 @@ extension=".${4##*.}"
 ancestor_temp=$(mktemp --suffix="$extension")
 current_temp=$(mktemp --suffix="$extension")
 other_temp=$(mktemp --suffix="$extension")
-result_temp=$(mktemp --suffix="$extension")
 
 cp "$1" "$ancestor_temp"
 cp "$2" "$current_temp"
@@ -24,18 +23,17 @@ export QT_LOGGING_RULES="*=false"
 fmeworkbench -TITLE-OVERRIDE "[$4] Merge" \
    -COMPARE-BASE "$ancestor_temp" -COMPARE-BASE-TITLE "Base" \
    -COMPARE-TITLE1 "Ours" -COMPARE-TITLE2 "Theirs" \
-   -COMPARE "$current_temp" "$other_temp" \
-   -MERGE-OUTPUT "$result_temp"
+   -COMPARE "$current_temp" "$other_temp"
 
 merge_status=$?
 
 if [ "$merge_status" -eq 0 ]; then
-   cp "$result_temp" "$2"
+   cp "$current_temp" "$2"
    echo "Merge completed successfully."
 else
    echo "Merge conflict unresolved."
 fi
 
-rm -f "$ancestor_temp" "$current_temp" "$other_temp" "$result_temp"
+rm -f "$ancestor_temp" "$current_temp" "$other_temp"
 
 exit $merge_status
